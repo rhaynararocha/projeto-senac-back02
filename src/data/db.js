@@ -89,15 +89,7 @@ export async function getDatabase() {
     await pool.query('ALTER TABLE tarefas ADD COLUMN IF NOT EXISTS descricao TEXT;');
     await pool.query("ALTER TABLE tarefas ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'Novo';");
 
-    // Migração de dados antigos: converte concluida (0/1) para status textual.
-    await pool.query(`
-      UPDATE tarefas
-      SET status = CASE
-        WHEN concluida = 1 THEN 'Concluida'
-        ELSE 'Novo'
-      END
-      WHERE status IS NULL OR status = '';
-    `);
+
 
     dbConnection = createAdapter(pool);
   }
